@@ -1,0 +1,7 @@
+{
+  "presets": [
+    ["@vue/app", {
+      "useBuiltIns": "usage" // src全局es5编译
+    }]
+  ]
+}
