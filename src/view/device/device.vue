@@ -16,7 +16,7 @@
       </div>
     </div>
     <div style="padding: 10px;">
-      <Table border :columns="columns" :data="tableData"></Table>
+      <Table v-if="showTable" border :columns="columns" :data="tableData"></Table>
       <footer>
         <Page
           v-show="tableData.length != 0"
@@ -50,7 +50,7 @@
         <Button type="primary" @click="ok">确定</Button>
       </div>
     </Modal>
-    
+
     <Modal v-model="modal1" title="修改直播机" width="500">
       <Form ref="formValidate1" :model="formItem1" :label-width="120" :rules="ruleValidate">
         <FormItem label="直播机名称" prop="device_name">
@@ -87,6 +87,7 @@ export default {
   name: 'device',
   data() {
     return {
+      showTable: true,
       device_id: '',
       defAccount: '',
       formItem: {
@@ -263,8 +264,12 @@ export default {
     getDevice(page = 1, search = '') {
       const data = { page: page, deviceNumber: search }
       getDevicePage(data).then(res => {
-        this.tableData = res.data.deviceLst
-        this.pageData = res.data.PageInfo
+        this.showTable = false
+        this.$nextTick(() => {
+          this.tableData = res.data.deviceLst
+          this.pageData = res.data.PageInfo
+          this.showTable = true
+        })
       })
     },
     remove(id) {
@@ -273,6 +278,9 @@ export default {
       delDevice(data).then(res => {
         if (res.data.result == true) {
           this.$Message.success('删除成功')
+          this.getDevice()
+        }else {
+          this.$Message.error(res.data.msg)
           this.getDevice()
         }
       })

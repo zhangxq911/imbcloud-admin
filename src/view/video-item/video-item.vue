@@ -1071,11 +1071,13 @@ export default {
       }
       showChannelControlDetail(data).then(res => {
         // 将所有自定义菜单的detail encode
-        res.data.custom_menu.forEach(item => {
-          if(item.menu_detail) {
-            item.menu_detail = Base64.decode(item.menu_detail)
-          }
-        })
+        // res.data.custom_menu.forEach(item => {
+        //   if(item.menu_detail) {
+        //     // console.log(item.menu_detail)
+        //     // item.menu_detail = Base64.decode(item.menu_detail)
+        //     // console.log('right')
+        //   }
+        // })
         this.channelDetail = res.data
         this.controlModal = true
       })

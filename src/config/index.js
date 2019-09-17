@@ -18,7 +18,7 @@ export default {
    */
   baseUrl: {
     // dev: 'http://192.168.1.157:8080/imb_web/',
-    dev: 'https://ceshi.imbcloud.cn/access/',
+    dev: 'https://api.imbcloud.cn/access/',
     pro: '/access/'
   },
   /**
