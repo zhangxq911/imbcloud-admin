@@ -5,7 +5,7 @@ import store from '@/store'
 import iView from 'iview'
 import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 import config from '@/config'
-import { getAccount } from '../api/user';
+import { getAccount, login } from '../api/user';
 import Cookies from 'js-cookie'
 const { homeName } = config
 
@@ -49,8 +49,19 @@ router.beforeEach((to, from, next) => {
     const userName = getQueryVariable('name')
     const password = getQueryVariable('psw')
     if (userName && password) {
-      store.dispatch('handleLogin', { userName, password }).then(res => {
-        if (res.data.result == true) {
+      login({
+        userName,
+        password
+      }).then(res => {
+        if (res.data.result) {
+          store.commit('setToken', res.data.msg.token)
+          store.commit('setAccountName', res.data.msg.accountName)
+          store.commit('setAccountId', res.data.msg.accountId)
+          if (res.data.msg.type === 'admin') {
+            store.commit('setAccess', ['admin', 'unit'])
+          } else if (res.data.msg.type === 'unit') {
+            store.commit('setAccess', ['unit'])
+          }
           next({
             name: homeName // 跳转到homeName页
           })
