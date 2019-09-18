@@ -438,7 +438,8 @@ export default {
                     size: 'small'
                   },
                   style: {
-                    marginRight: '3px'
+                    marginRight: '3px',
+                    display: params.row.name === 'admin' ? 'none' : 'initial'
                   },
                   on: {
                     click: () => {
