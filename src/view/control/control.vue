@@ -395,12 +395,12 @@
               </Col>
             </Row>
           </FormItem>
-          <FormItem label="分享下载开关">
+          <!-- <FormItem label="分享下载开关">
             <i-switch
               :value="curChannelDetail.download_flag ? true : false"
               @on-change="changeDownloadFlag"
             ></i-switch>
-          </FormItem>
+          </FormItem> -->
           <Row>
             <Col span="12">
               <FormItem label="微信分享详情" prop="wx_share_msg">
@@ -1445,10 +1445,10 @@ export default {
       // 引导图开关
       this.curChannelDetail.guide_flag = status ? 1 : 0
     },
-    changeDownloadFlag(status) {
-      // 分享下载开关
-      this.curChannelDetail.download_flag = status ? 1 : 0
-    },
+    // changeDownloadFlag(status) {
+    //   // 分享下载开关
+    //   this.curChannelDetail.download_flag = status ? 1 : 0
+    // },
     changeWxMpFlag(status) {
       // 公众号显示开关
       this.curChannelDetail.wx_mp_flag = status ? 1 : 0
