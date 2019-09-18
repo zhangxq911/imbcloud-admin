@@ -439,7 +439,7 @@ export default {
                   },
                   style: {
                     marginRight: '3px',
-                    display: params.row.name === 'admin' ? 'none' : 'initial'
+                    display: params.row.type === 'admin' ? 'none' : 'initial' // 管理员账户类型不显示停用和启用按钮，不用if 是因为没必要，后端没有校验
                   },
                   on: {
                     click: () => {
