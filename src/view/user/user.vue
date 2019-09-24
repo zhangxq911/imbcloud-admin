@@ -11,7 +11,7 @@
           placeholder="输入校验ID"
           style="width:200px; margin-right:10px;"
         />
-        <Button type="success" icon="ios-search" @click="handleSearch">搜索</Button>
+        <Button type="primary" icon="ios-search" @click="handleSearch">搜索</Button>
         <Icon @click="refresh" class="refresh" type="md-refresh-circle" />
       </div>
     </div>

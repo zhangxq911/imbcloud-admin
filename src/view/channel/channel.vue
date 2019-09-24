@@ -6,17 +6,17 @@
         <Button @click="showDel">删除</Button>
       </div>
       <div class="navRight" v-show="!delBar">
-        <Button @click="handleLive()" :type="live === '' ? 'success' : 'default'">全部</Button>
-        <Button @click="handleLive(1)" :type="live === 1 ? 'success' : 'default'">正在直播</Button>
-        <Button @click="handleLive(0)" :type="live === 0 ? 'success' : 'default'">预约直播</Button>
-        <Button @click="handleLive(-1)" :type="live === -1 ? 'success' : 'default'">直播结束</Button>
+        <Button @click="handleLive()" :type="live === '' ? 'primary' : 'default'">全部</Button>
+        <Button @click="handleLive(1)" :type="live === 1 ? 'primary' : 'default'">正在直播</Button>
+        <Button @click="handleLive(0)" :type="live === 0 ? 'primary' : 'default'">预约直播</Button>
+        <Button @click="handleLive(-1)" :type="live === -1 ? 'primary' : 'default'">直播结束</Button>
         <Input
           v-model="value"
           placeholder="输入频道id"
           style="width:200px;margin-right:10px;"
           @on-enter="handleSearch"
         />
-        <Button type="success" icon="ios-search" @click="handleSearch">搜索</Button>
+        <Button type="primary" icon="ios-search" @click="handleSearch">搜索</Button>
         <Icon @click="refresh" class="refresh" type="md-refresh-circle" />
       </div>
       <!-- 删除 bar -->
@@ -25,7 +25,7 @@
         <Button @click="showNoraml">关闭</Button>
         <span>
           已选中
-          <span class="selectNum">{{ selectNum }}</span>个直播
+          <span class="selectNum">{{ delChannelList.length }}</span>个直播
         </span>
       </div>
     </div>
@@ -170,7 +170,7 @@ export default {
       channelList: [],
       delChannelList: [],
       modal: false,
-      selectNum: 0,
+      // selectNum: 0,
       pageData: {},
       pageAccountData: {},
       pageLiveData: {},
@@ -422,7 +422,7 @@ export default {
       this.getChannel('', live)
       // 清空选中数据
       this.delChannelList = []
-      this.selectNum = 0
+      // this.selectNum = 0
     },
     ok() {
       this.$refs['formValidate'].validate(valid => {
@@ -453,7 +453,7 @@ export default {
     },
     getChannelIdsList(channelParams) {
       this.delChannelList = channelParams
-      this.selectNum = this.delChannelList.length
+      // this.selectNum = this.delChannelList.length
     },
     delAllChannel() {
       let data = { channelIds: this.delChannelList }
@@ -466,7 +466,7 @@ export default {
         if (res.data.result == true) {
           this.getChannel()
           // 清空选中数组
-          this.selectNum = 0
+          // this.selectNum = 0
           this.selectList = []
         }
       })
@@ -476,13 +476,13 @@ export default {
     },
     showDel() {
       this.delChannelList = []
-      this.selectNum = 0
+      // this.selectNum = 0
       this.selectList = []
       this.isDelStatus = true
       this.delBar = !this.delBar
     },
     showNoraml() {
-      this.selectNum = 0
+      // this.selectNum = 0
       this.delChannelList = []
       this.isDelStatus = false
       this.selectList = []

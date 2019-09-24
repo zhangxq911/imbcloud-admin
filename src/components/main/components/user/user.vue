@@ -4,7 +4,7 @@
       <!-- <Badge :dot="!!messageUnreadCount"> -->
       <Badge>
         <!-- <Avatar :src="userAvator"/> -->
-        <Avatar style="background-color: #87d068" icon="ios-person" />
+        <Avatar style="background-color: #999999" icon="ios-person" />
         {{ userName }}
       </Badge>
 
