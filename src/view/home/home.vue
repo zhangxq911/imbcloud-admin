@@ -135,7 +135,7 @@ export default {
         // this.cumulativeLiveNum = res.data.cumulativeLiveNum
         // this.cumulativeWatchNum = res.data.cumulativeWatchNum
         // 最近直播观众人数
-        if (res.data.liveInfoVOs !== null) {
+        if (res.data.liveInfoVOs) {
           for (let item of res.data.liveInfoVOs) {
             this.barData[item.liveTime] = item.cumulativeWatchNum
           }
