@@ -21,7 +21,7 @@
       </div>
       <!-- 删除 bar -->
       <div class="navLeft" v-show="delBar">
-        <Button @click="delAllChannel">删除选中</Button>
+        <Button type="error" @click="delAllChannel">删除选中</Button>
         <Button @click="showNoraml">关闭</Button>
         <span>
           已选中
