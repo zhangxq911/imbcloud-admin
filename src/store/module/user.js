@@ -1,5 +1,6 @@
 import {
   login,
+  ailogin,
   logout,
   getUserInfo,
   getMessage,
@@ -17,6 +18,7 @@ export default {
     userId: '',
     accountId: '',
     accountName: '',
+    accountSource: '',
     avatorImgPath: '',
     token: getToken(),
     access: '',
@@ -37,8 +39,11 @@ export default {
     setAccountId (state, accountId) {
       state.accountId = accountId
     },
-    setAccountName (state, accountNmae) {
-      state.accountName = accountNmae
+    setAccountName (state, accountName) {
+      state.accountName = accountName
+    },
+    setAccountSource (state, accountSource) {
+      state.accountSource = accountSource
     },
     setUserName (state, name) {
       state.userName = name
@@ -82,29 +87,54 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, { userName, password }) {
+    handleLogin ({ commit }, { userName, password, accountType }) {
       userName = userName.trim()
+      //accountLink: ['美播云', '云上会议']
       return new Promise((resolve, reject) => {
-        login({
-          userName,
-          password
-        }).then(res => {
-          if (res.data.result == true) {
-            commit('setToken', res.data.msg.token)
-            commit('setAccountName', res.data.msg.accountName)
-            commit('setAccountId', res.data.msg.accountId)
-            if (res.data.msg.type === 'admin') {
-              commit('setAccess', ['admin', 'unit'])
-            } else if(res.data.msg.type === 'unit'){
-              commit('setAccess', ['unit'])
-            }else {
-              
+        // 美播云登录
+        if (accountType === 0) {
+          login({
+            userName,
+            password
+          }).then(res => {
+            if (res.data.result == true) {
+              commit('setToken', res.data.msg.token)
+              commit('setAccountSource', res.data.msg.accountSource)
+              commit('setAccountName', res.data.msg.accountName)
+              commit('setAccountId', res.data.msg.accountId)
+              if (res.data.msg.type === 'admin') {
+                commit('setAccess', ['admin', 'unit'])
+              } else if (res.data.msg.type === 'unit') {
+                commit('setAccess', ['unit'])
+              }
             }
-          }
-          resolve(res)
-        }).catch(err => {
-          reject(err)
-        })
+            resolve(res)
+          }).catch(err => {
+            reject(err)
+          })
+        } else if (accountType === 1) {
+          // 云上会面
+          ailogin({
+            userName,
+            password
+          }).then(res => {
+            if (res.data.result == true) {
+              commit('setToken', res.data.msg.token)
+              commit('setAccountSource', res.data.msg.accountSource)
+              commit('setAccountName', res.data.msg.accountName)
+              commit('setAccountId', res.data.msg.accountId)
+              if (res.data.msg.type === 'admin') {
+                commit('setAccess', ['admin', 'unit'])
+              } else if (res.data.msg.type === 'unit') {
+                commit('setAccess', ['unit'])
+              }
+            }
+            resolve(res)
+          }).catch(err => {
+            reject(err)
+          })
+        }
+
       })
     },
     // 退出登录

@@ -6,9 +6,9 @@
   <div class="login">
     <div class="header"></div>
     <div v-if="isShow == 1" class="login-con">
-      <Card icon="log-in" title="账号登录" :bordered="false">
+      <Card icon="log-in" :title="accountTitle + '账号登录'" :bordered="false">
         <div class="form-con">
-          <login-form @on-success-valid="handleSubmit" @setConfig="getConfig"></login-form>
+          <login-form :accountLink="accountLink" @listenTitle="changeTitle" @on-success-valid="handleSubmit" @setConfig="getConfig"></login-form>
         </div>
       </Card>
     </div>
@@ -227,6 +227,9 @@ export default {
     }
 
     return {
+      curTitle: 0,
+      accountTitle: '美播云',
+      accountLink: ['美播云', '云上会面'],
       isShow: 1,
       time: 0,
       isShowBtn: true,
@@ -253,6 +256,10 @@ export default {
     }
   },
   methods: {
+    changeTitle(val) {
+      this.curTitle = val
+      this.accountTitle = this.accountLink[val]
+    },
     forgetPwd2() {
       // 判断是否有点击发送按钮，点击验证码发送后才能获取pageid
       if (!this.forgetForm2.pageId) {
@@ -387,8 +394,8 @@ export default {
       })
     },
     ...mapActions(['handleLogin']),
-    handleSubmit({ userName, password }) {
-      this.handleLogin({ userName, password }).then(res => {
+    handleSubmit({ userName, password, accountType }) {
+      this.handleLogin({ userName, password, accountType }).then(res => {
         if (res.data.result == true) {
           this.$router.push({
             name: this.$config.homeName

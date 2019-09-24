@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
+import Cookies from 'js-cookie'
 // import { Spin } from 'iview'
 const addErrorLog = errorInfo => {
   const { statusText, status, request: { responseURL } } = errorInfo
@@ -17,7 +18,7 @@ class HttpRequest {
     this.baseUrl = baseUrl
     this.queue = {}
   }
-  getInsideConfig() {
+  getInsideConfig () {
     const config = {
       baseURL: this.baseUrl,
       headers: {
@@ -26,16 +27,20 @@ class HttpRequest {
     }
     return config
   }
-  destroy(url) {
+  destroy (url) {
     delete this.queue[url]
     if (!Object.keys(this.queue).length) {
       // Spin.hide()
     }
   }
-  interceptors(instance, url) {
+  interceptors (instance, url) {
     // 请求拦截
     instance.interceptors.request.use(config => {
-      config.headers.token = store.state.user.token;
+      if (store.state.user.token) {
+        config.headers.token = store.state.user.token
+
+        // config.headers.token ? "" : config.headers.token = store.state.user.token;
+      }
       if (config.method === 'post') {
         const formData = new FormData()
         Object.keys(config.data).forEach(key => formData.append(key, config.data[key]))
@@ -52,8 +57,9 @@ class HttpRequest {
     })
     // 响应拦截
     instance.interceptors.response.use(res => {
+      // debugger
       // token 失效拦截
-      if(res.data.code === -10086) {
+      if (res.data.code === -10086) {
         store.commit('setToken', '')
         window.location.href = '/login'
       }
@@ -75,7 +81,7 @@ class HttpRequest {
       return Promise.reject(error)
     })
   }
-  request(options) {
+  request (options) {
     const instance = axios.create()
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)

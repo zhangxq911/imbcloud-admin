@@ -4,13 +4,13 @@
       <!-- <Badge :dot="!!messageUnreadCount"> -->
       <Badge>
         <!-- <Avatar :src="userAvator"/> -->
-        <Avatar style="background-color: #87d068" icon="ios-person"/>
+        <Avatar style="background-color: #87d068" icon="ios-person" />
         {{ userName }}
       </Badge>
 
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="changePwd">修改密码</DropdownItem>
+        <DropdownItem v-if="accountSource === 0" name="changePwd">修改密码</DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -77,7 +77,7 @@ export default {
 
     return {
       userName: '',
-
+      accountSource: -1,
       modal: false,
       formPwd: {},
       ruleValidate: {
@@ -94,7 +94,8 @@ export default {
     }
   },
   created() {
-    this.userName = this.$store.state.user.userName
+    this.userName = this.$store.state.user.accountName
+    this.accountSource = this.$store.state.user.accountSource
   },
   methods: {
     submit() {

@@ -17,10 +17,21 @@
     <FormItem>
       <Button @click="handleSubmit" type="primary" long>登录</Button>
     </FormItem>
-      <div class="footer">
-        <a href="javascript:void(0)" @click="setForget()">忘记密码</a>
-        <a href="javascript:void(0)" @click="setReg()">注册</a>
-      </div>
+    <div class="footer">
+      <span class="account-type">
+        <a
+          href="javascript:void(0)"
+          v-for="(item, index) in accountLink"
+          :key="index"
+          v-if="curKey !== index"
+          @click="selectLink(index)"
+        >{{item}}登录</a>
+      </span>
+      <span>
+        <a v-show="curKey === 0" href="javascript:void(0)" @click="setForget()">忘记密码</a>
+        <a v-show="curKey === 0" href="javascript:void(0)" @click="setReg()">注册</a>
+      </span>
+    </div>
   </Form>
 </template>
 <script>
@@ -38,6 +49,9 @@ export default {
       default: () => {
         return [{ required: true, message: '密码不能为空', trigger: 'blur' }]
       }
+    },
+    accountLink: {
+      type: Array
     }
   },
   data() {
@@ -45,7 +59,8 @@ export default {
       form: {
         userName: '',
         password: ''
-      }
+      },
+      curKey: 0
     }
   },
   computed: {
@@ -57,6 +72,10 @@ export default {
     }
   },
   methods: {
+    selectLink(val) {
+      this.curKey = val
+      this.$emit('listenTitle', this.curKey)
+    },
     setForget() {
       this.$emit('setConfig', 2)
     },
@@ -70,7 +89,8 @@ export default {
           this.$store.commit('setUserName', this.form.userName)
           this.$emit('on-success-valid', {
             userName: this.form.userName,
-            password: this.form.password
+            password: this.form.password,
+            accountType: this.curKey
           })
         }
       })
@@ -82,9 +102,17 @@ export default {
 <style>
 .footer {
   text-align: right;
+  display: flex;
+  justify-content: space-between;
+}
+.footer span:nth-child(1) a {
+  padding: 0px;
 }
 .footer a {
   padding-left: 10px;
   font-size: 12px;
 }
+/* .footer .account-type {
+  float: left;
+} */
 </style>

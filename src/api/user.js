@@ -12,6 +12,18 @@ export const login = ({ userName, password }) => {
   })
 }
 
+export const ailogin = ({ userName, password }) => {
+  const data = {
+    account: userName,
+    password: password
+  }
+  return axios.request({
+    url: 'console/doAiLogin.do',
+    data,
+    method: 'post'
+  })
+}
+
 export const getUserInfo = (token) => {
   return axios.request({
     url: 'get_info',
