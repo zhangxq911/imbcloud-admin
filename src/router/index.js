@@ -6,7 +6,7 @@ import iView from 'iview'
 import { setToken, getToken, canTurnTo, setTitle } from '@/libs/util'
 import config from '@/config'
 import { getAccount, login } from '../api/user';
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 const { homeName } = config
 
 Vue.use(Router)
@@ -34,8 +34,34 @@ const getQueryVariable = variable => {
 
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
-  const token = getToken()
+  // 判断是否有参数带token
+  let token = getToken()
   if (!token && to.name !== LOGIN_PAGE_NAME) {
+    if (getQueryVariable('token')) {
+      store.commit('setToken', '')
+      const tempToken = getQueryVariable('token')
+      // 已登录且要跳转的是默认域名
+      getAccount(tempToken).then(res => {
+        if (res.data.result) {
+          store.commit('setToken', tempToken)
+          store.commit('setAccountName', res.data.msg.accountName)
+          store.commit('setAccountId', res.data.msg.accountId)
+          if (res.data.msg.type === 'admin') {
+            store.commit('setAccess', ['admin', 'unit'])
+          } else if (res.data.msg.type === 'unit') {
+            store.commit('setAccess', ['unit'])
+          }
+          next({
+            name: homeName // 跳转到homeName页
+          })
+        } else {
+          setToken('')
+          next({
+            name: LOGIN_PAGE_NAME // 跳转到login页
+          })
+        }
+      })
+    }
     // 未登录且要跳转的页面不是登录页
     if (to.path !== '/h5/share/channel' && to.path !== '/access/h5/share/channel') {
       next({
@@ -73,31 +99,83 @@ router.beforeEach((to, from, next) => {
       next() // 跳转
     }
   } else if (token && to.name === LOGIN_PAGE_NAME) {
+
     // 已登录且要跳转的页面是登录页
     next({
       name: homeName // 跳转到homeName页
     })
   } else if (token && !to.name) {
-    // 已登录且要跳转的是默认域名
-    getAccount(token).then(res => {
-      if (res.data.result) {
-        store.commit('setAccountName', res.data.msg.accountName)
-        store.commit('setAccountId', res.data.msg.accountId)
-        if (res.data.msg.type === 'admin') {
-          store.commit('setAccess', ['admin', 'unit'])
-        } else if (res.data.msg.type === 'unit') {
-          store.commit('setAccess', ['unit'])
+    // 获取url地址，如果有账号和密码则进行跳转主页
+    const userName = getQueryVariable('name')
+    const password = getQueryVariable('psw')
+    if (userName && password) {
+      store.commit('setToken', '')
+      login({
+        userName,
+        password
+      }).then(res => {
+        if (res.data.result) {
+          store.commit('setToken', res.data.msg.token)
+          store.commit('setAccountName', res.data.msg.accountName)
+          store.commit('setAccountId', res.data.msg.accountId)
+          if (res.data.msg.type === 'admin') {
+            store.commit('setAccess', ['admin', 'unit'])
+          } else if (res.data.msg.type === 'unit') {
+            store.commit('setAccess', ['unit'])
+          }
+          next({
+            name: homeName // 跳转到homeName页
+          })
+        } else {
+          next() // 跳转
         }
-        next({
-          name: homeName // 跳转到homeName页
-        })
-      } else {
-        setToken('')
-        next({
-          name: LOGIN_PAGE_NAME // 跳转到homeName页
-        })
-      }
-    })
+      })
+    } else if (getQueryVariable('token')) {
+      store.commit('setToken', '')
+      // 已登录且要跳转的是默认域名
+      getAccount(getQueryVariable('token')).then(res => {
+        if (res.data.result) {
+          store.commit('setToken', getQueryVariable('token'))
+          store.commit('setAccountName', res.data.msg.accountName)
+          store.commit('setAccountId', res.data.msg.accountId)
+          if (res.data.msg.type === 'admin') {
+            store.commit('setAccess', ['admin', 'unit'])
+          } else if (res.data.msg.type === 'unit') {
+            store.commit('setAccess', ['unit'])
+          }
+          next({
+            name: homeName // 跳转到homeName页
+          })
+        } else {
+          setToken('')
+          next({
+            name: LOGIN_PAGE_NAME // 跳转到login页
+          })
+        }
+      })
+    } else {
+      // 已登录且要跳转的是默认域名
+      getAccount(token).then(res => {
+        if (res.data.result) {
+          store.commit('setAccountName', res.data.msg.accountName)
+          store.commit('setAccountId', res.data.msg.accountId)
+          if (res.data.msg.type === 'admin') {
+            store.commit('setAccess', ['admin', 'unit'])
+          } else if (res.data.msg.type === 'unit') {
+            store.commit('setAccess', ['unit'])
+          }
+          next({
+            name: homeName // 跳转到homeName页
+          })
+        } else {
+          setToken('')
+          next({
+            name: LOGIN_PAGE_NAME // 跳转到login页
+          })
+        }
+      })
+    }
+
   } else {
     if (!store.state.user.hasGetInfo) {
       turnTo(to, store.state.user.access, next)
