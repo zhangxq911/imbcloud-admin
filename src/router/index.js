@@ -46,6 +46,8 @@ router.beforeEach((to, from, next) => {
           store.commit('setToken', tempToken)
           store.commit('setAccountName', res.data.msg.accountName)
           store.commit('setAccountId', res.data.msg.accountId)
+          store.commit('setFreeSecret', true)
+
           if (res.data.msg.type === 'admin') {
             store.commit('setAccess', ['admin', 'unit'])
           } else if (res.data.msg.type === 'unit') {
@@ -83,6 +85,8 @@ router.beforeEach((to, from, next) => {
           store.commit('setToken', res.data.msg.token)
           store.commit('setAccountName', res.data.msg.accountName)
           store.commit('setAccountId', res.data.msg.accountId)
+          store.commit('setFreeSecret', true)
+
           if (res.data.msg.type === 'admin') {
             store.commit('setAccess', ['admin', 'unit'])
           } else if (res.data.msg.type === 'unit') {
@@ -118,6 +122,8 @@ router.beforeEach((to, from, next) => {
           store.commit('setToken', res.data.msg.token)
           store.commit('setAccountName', res.data.msg.accountName)
           store.commit('setAccountId', res.data.msg.accountId)
+          store.commit('setFreeSecret', true)
+
           if (res.data.msg.type === 'admin') {
             store.commit('setAccess', ['admin', 'unit'])
           } else if (res.data.msg.type === 'unit') {
@@ -138,6 +144,8 @@ router.beforeEach((to, from, next) => {
           store.commit('setToken', getQueryVariable('token'))
           store.commit('setAccountName', res.data.msg.accountName)
           store.commit('setAccountId', res.data.msg.accountId)
+          store.commit('setFreeSecret', true)
+
           if (res.data.msg.type === 'admin') {
             store.commit('setAccess', ['admin', 'unit'])
           } else if (res.data.msg.type === 'unit') {

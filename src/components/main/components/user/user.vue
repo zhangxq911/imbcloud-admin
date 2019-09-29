@@ -8,8 +8,8 @@
         {{ userName }}
       </Badge>
 
-      <Icon :size="18" type="md-arrow-dropdown"></Icon>
-      <DropdownMenu slot="list">
+      <Icon v-if="!freeSecret" :size="18" type="md-arrow-dropdown"></Icon>
+      <DropdownMenu v-if="!freeSecret" slot="list">
         <DropdownItem v-if="accountSource === 0" name="changePwd">修改密码</DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
@@ -76,6 +76,7 @@ export default {
     }
 
     return {
+      freeSecret: false,
       userName: '',
       accountSource: -1,
       modal: false,
@@ -96,6 +97,7 @@ export default {
   created() {
     this.userName = this.$store.state.user.accountName
     this.accountSource = this.$store.state.user.accountSource
+    this.freeSecret = this.$store.state.user.freeSecret
   },
   methods: {
     submit() {

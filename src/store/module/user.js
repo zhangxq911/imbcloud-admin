@@ -14,11 +14,12 @@ import { setToken, getToken } from '@/libs/util'
 
 export default {
   state: {
+    freeSecret: false,
     userName: '',
     userId: '',
     accountId: '',
     accountName: '',
-    accountSource: '',
+    accountSource: '', // 账号来源 0 美播云 1 智能中心
     avatorImgPath: '',
     token: getToken(),
     access: '',
@@ -30,6 +31,9 @@ export default {
     messageContentStore: {}
   },
   mutations: {
+    setFreeSecret (state, val) {
+      state.freeSecret = val
+    },
     setAvator (state, avatorPath) {
       state.avatorImgPath = avatorPath
     },
