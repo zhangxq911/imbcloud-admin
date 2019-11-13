@@ -400,7 +400,7 @@
               :value="curChannelDetail.download_flag ? true : false"
               @on-change="changeDownloadFlag"
             ></i-switch>
-          </FormItem> -->
+          </FormItem>-->
           <Row>
             <Col span="12">
               <FormItem label="微信分享详情" prop="wx_share_msg">
@@ -1150,7 +1150,8 @@ export default {
             banner_type: 0,
             banner_imgurl: ''
           }
-        ]
+        ],
+        wx_mp_image: ''
       },
       ruleValidate: {
         // name: [
@@ -1620,6 +1621,10 @@ export default {
   mounted() {
     // 初始化获取的值
     this.curChannelDetail = this.channelDetail
+    if (!this.curChannelDetail.wx_mp_image) {
+      this.curChannelDetail.wx_mp_image =
+        'http://imbcloud.oss-cn-hangzhou.aliyuncs.com/api_image/no2w.png'
+    }
     // 初始化默认显示的菜单项
     this.tempMenu = this.curChannelDetail.custom_menu[0]
     // 菜单分类除图文外均只有一个选择项，添加 disabled 属性

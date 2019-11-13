@@ -31,6 +31,7 @@
     </div>
     <div class="con">
       <videoItem
+        v-if="channelList.length"
         @sendChannelIdsList="getChannelIdsList"
         @sendSelectList="getSelectList"
         v-for="(item, index) in channelList"
@@ -57,7 +58,13 @@
     <Modal v-model="modal" title="添加直播" width="700">
       <Form ref="formValidate" :model="formChannel" :label-width="200" :rules="ruleValidate">
         <FormItem label="频道id">
-          <InputNumber style="width: 100%;" :min="1" :max="9999999999" v-model="formChannel.channel_id" placeholder="频道id为空时自动生成"></InputNumber>
+          <InputNumber
+            style="width: 100%;"
+            :min="1"
+            :max="9999999999"
+            v-model="formChannel.channel_id"
+            placeholder="频道id为空时自动生成"
+          ></InputNumber>
         </FormItem>
         <FormItem label="频道名称" prop="name">
           <Input v-model="formChannel.name" placeholder="频道名称"></Input>
@@ -93,12 +100,12 @@
             placeholder="点击选择"
             @on-focus="getAccount"
           ></Input>
-          <Icon class="addIcon" type="md-add"/>
+          <Icon class="addIcon" type="md-add" />
         </FormItem>
         <Input v-show="false" v-if="defAccount === 'unit'" v-model="formChannel.account_name"></Input>
         <FormItem label="频道所属直播机设备" prop="device_name">
           <Input readonly v-model="formChannel.device_name" placeholder="点击选择" @on-focus="getLive"></Input>
-          <Icon class="addIcon" type="md-add"/>
+          <Icon class="addIcon" type="md-add" />
         </FormItem>
       </Form>
       <!-- 官方提供的on-ok方法会导致modal自动关闭，校验出错也关闭，手动写 -->
@@ -154,7 +161,7 @@ export default {
     const validateName = (rule, value, callback) => {
       if (value && value.length > 16) {
         callback(new Error('最多16个字符'))
-      }else if(!value) {
+      } else if (!value) {
         callback(new Error('这是必填字段'))
       } else {
         callback()
@@ -352,6 +359,7 @@ export default {
   methods: {
     // 刷新
     refresh() {
+      this.channelList = []
       this.getChannel('', this.live, 1)
       this.$Message.success('刷新成功')
     },

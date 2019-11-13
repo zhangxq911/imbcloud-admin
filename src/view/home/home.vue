@@ -3,7 +3,7 @@
     <div class="top">
       <h2>
         直播概述
-        <Icon style="font-size: 30px;" @click="refresh" class="refresh" type="md-refresh-circle"/>
+        <Icon style="font-size: 30px;" @click="refresh" class="refresh" type="md-refresh-circle" />
       </h2>
       <div class="flex">
         <div class="txt">
@@ -51,6 +51,7 @@
       <h2>正在直播</h2>
       <div class="flex" style="margin-top:20px;">
         <videoItem
+          v-if="channelList.length"
           v-for="(item, index) in channelList"
           @sendSelectList="getSelectList"
           :key="item.channel_id"
@@ -103,7 +104,9 @@ export default {
   },
   methods: {
     refresh() {
+      this.channelList = []
       this.getLiveSummary()
+      this.getChannel()
       this.$Message.success('刷新成功')
     },
     // 修改选中项

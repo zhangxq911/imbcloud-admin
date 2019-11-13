@@ -279,7 +279,7 @@ export default {
         if (res.data.result == true) {
           this.$Message.success('删除成功')
           this.getDevice()
-        }else {
+        } else {
           this.$Message.error(res.data.msg)
           this.getDevice()
         }
