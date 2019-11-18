@@ -1640,6 +1640,10 @@ export default {
         this.curChannelDetail.screenUrl = el.menu_detail
       }
     })
+    // 默认回放赋值
+    this.curChannelDetail.live_video_id
+      ? (this.isChoose = this.curChannelDetail.live_video_id)
+      : '-1'
     this.curOption = arr[0]
     this.disableList = arr
     // 判断类型是否为图文，展示右侧的富文本框
@@ -1664,6 +1668,9 @@ export default {
     let editor2 = new Editor('#detailEditor')
     editor2.customConfig.onchange = html => {
       this.curChannelDetail.detail = html
+    }
+    editor2.customConfig.linkImgCallback = function(url) {
+      return 'https://images.weserv.nl/?url=' + url
     }
     editor2.create()
     editor2.txt.html(this.curChannelDetail.detail)
