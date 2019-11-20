@@ -5,11 +5,11 @@
       @click="selectItem(channel_id)"
       v-bind:class="{ active: this.selectList.indexOf(this.index) > -1 , live: isLive, prev: isPrev, end: isEnd}"
     >
-      <img width="250" src="../../assets/images/cover_live_small.png">
+      <img width="250" src="../../assets/images/cover_live_small.png" />
       <h2 :title="name" class="channelMsg">{{ channel_id }} | {{ modifyName?modifyName:name }}</h2>
       <h3>{{ start_time }}</h3>
       <div class="person">
-        <img src="../../assets/icons/user.png" width="12">
+        <img src="../../assets/icons/user.png" width="12" />
         <span>{{ online_user_num }}</span>
       </div>
       <div
@@ -19,31 +19,31 @@
         <div class="controlBox">
           <div @click.stop="startLiveTip = true" v-show="!isLive">
             <span>
-              <img src="../../assets/images/video.png" alt>
+              <img src="../../assets/images/video.png" alt />
             </span>
             <span>开播</span>
           </div>
           <div @click.stop="stopLiveTip = true" v-show="isLive">
             <span>
-              <img src="../../assets/images/stop.png" alt>
+              <img src="../../assets/images/stop.png" alt />
             </span>
             <span>停播</span>
           </div>
           <div @click.stop="getChannelDetail">
             <span>
-              <img src="../../assets/images/setting.png" alt>
+              <img src="../../assets/images/setting.png" alt />
             </span>
             <span>控制</span>
           </div>
           <div @click.stop="backPlay">
             <span>
-              <img src="../../assets/images/word.png" alt>
+              <img src="../../assets/images/word.png" alt />
             </span>
             <span>回放</span>
           </div>
           <div @click.stop="showData()">
             <span>
-              <img src="../../assets/images/data.png" alt>
+              <img src="../../assets/images/data.png" alt />
             </span>
             <span>数据</span>
           </div>
@@ -79,7 +79,7 @@
       </div>
       <div slot="footer" class="controlFooter">
         <p @click="shareLive" class="shareURI">
-          <Icon type="md-share"/>分享直播
+          <Icon type="md-share" />分享直播
         </p>
         <Button type="primary" @click="updateMsg">提交</Button>
       </div>
@@ -114,7 +114,7 @@
                   @click="playVedio(item.video_url, item.cover_url)"
                   :src="item.cover_url"
                   alt="回放封面"
-                >
+                />
               </Col>
               <Col span="14">
                 <p class="nowarp">
@@ -142,7 +142,7 @@
           回放上传:
           <Button type="primary" @click="vExampleAdd">上传视频</Button>
           <form ref="vExample">
-            <input type="file" style="display:none;" ref="vExampleFile" @change="vExampleUpload">
+            <input type="file" style="display:none;" ref="vExampleFile" @change="vExampleUpload" />
           </form>
         </div>
         <div>
@@ -163,7 +163,7 @@
     </Modal>
     <!-- 上传进度条 -->
     <Modal v-model="uploadProgress" :closable="false">
-      <Progress :percent="progress" status="active"/>
+      <Progress :percent="progress" status="active" />
       <div slot="footer">
         视频上传中，请稍后...
         <!-- <Button type="primary" @click="uploaderInfo.cancel()">取消</Button> -->
@@ -309,7 +309,7 @@
             >
               <div style="padding: 0px 6px;">
                 <div class="boxLabel" style="background: #e74c3c;">
-                  <Icon class="iconLabel" type="ios-pulse"/>
+                  <Icon class="iconLabel" type="ios-pulse" />
                 </div>
               </div>
               <div style=" display: flex; flex-direction: column;">
@@ -322,7 +322,7 @@
             >
               <div style="padding: 0px 6px;">
                 <div class="boxLabel" style="background: #2D8cF0;">
-                  <Icon class="iconLabel" type="md-eye"/>
+                  <Icon class="iconLabel" type="md-eye" />
                 </div>
               </div>
               <div style=" display: flex; flex-direction: column;">
@@ -338,7 +338,7 @@
             <div style="flex: 1 1 0%;display: flex;align-items: center; justify-content: center;">
               <div style="padding: 0px 6px;">
                 <div class="boxLabel" style="background: #f90;">
-                  <Icon class="iconLabel" type="md-people"/>
+                  <Icon class="iconLabel" type="md-people" />
                 </div>
               </div>
               <div style=" display: flex; flex-direction: column;">
@@ -1087,19 +1087,23 @@ export default {
       let chil = this.$refs.ch
       let obj = chil.curChannelDetail
       // 判断名称
-      if(!obj.name){
+      if (!obj.name) {
         this.$Message.error('频道名称为必填项！')
         return
       }
-      if(obj.name.length > 16) {
+      if (obj.name.length > 16) {
         this.$Message.error('频道名称不能超过16个字符！')
         return
       }
       // 自定义菜单提交前要处理一下，如果菜单类型不是图文的话，详情删除
       for (let item of obj.custom_menu) {
+        if (!item.menu_name) {
+          this.$Message.error('菜单名称不能为空！')
+          return false
+        }
         if (item.menu_type !== 1) {
           item.menu_detail = ''
-        }else {
+        } else {
           item.menu_detail = Base64.encode(item.menu_detail)
         }
         if (item.menu_type === 7) {
