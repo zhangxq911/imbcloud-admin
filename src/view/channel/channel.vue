@@ -360,7 +360,7 @@ export default {
     // 刷新
     refresh() {
       this.channelList = []
-      this.getChannel('', this.live, 1)
+      this.getChannel(this.value, this.live, 1)
       this.$Message.success('刷新成功')
     },
     // 修改选中项
@@ -415,7 +415,11 @@ export default {
     },
     getChannel(filter = '', live = '', page = 1) {
       // filter 频道号码 live 直播状态 page 页码
-      const data = { page, filter, live }
+      let realFilter = ''
+      if (filter) {
+        realFilter = 'channel_id=' + filter
+      }
+      const data = { page, filter: realFilter, live }
       getChannelPage(data).then(res => {
         this.pageData = res.data.pageData
         this.channelList = res.data.channelList
